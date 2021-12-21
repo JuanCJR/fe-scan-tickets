@@ -3,13 +3,29 @@ import { Ticket } from "../interfaces/Ticket";
 
 import { getRoute } from "../routes/tickets.routes";
 
-export const getTickets = async (token: string) => {
-  const result = await axios.get(getRoute("find"));
+export const getTickets = async () => {
+  const token = sessionStorage.getItem("access_token");
+  const result = await axios({
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    url: getRoute("find"),
+  });
+
   return result.data;
 };
 
-export const getTicket = async (id: number) => {
-  const result = await axios.get(getRoute("find"));
+export const getTicket = async (id: string | undefined) => {
+  const token = sessionStorage.getItem("access_token");
+
+  const result = await axios({
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    url: `${getRoute("find")}/${id}`,
+  });
   return result.data;
 };
 

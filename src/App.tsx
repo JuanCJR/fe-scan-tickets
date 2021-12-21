@@ -9,6 +9,7 @@ import { Venta } from "./pages/Venta";
 import { Usuarios } from "./pages/Usuarios";
 import { Check } from "./pages/Check";
 import { Login } from "./pages/Login";
+import { Invoice } from "./pages/Invoice";
 
 export default class App extends Component {
   render() {
@@ -21,6 +22,7 @@ export default class App extends Component {
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/login" element={<Login />} />
           <Route path="/check" element={<Check />} />
+          <Route path="/invoice/:id" element={<Invoice />} />
         </Routes>
       </div>
     );

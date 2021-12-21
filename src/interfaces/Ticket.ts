@@ -6,6 +6,5 @@ export interface Ticket {
   purchaseDate: Date;
   price: number;
   quantity: number;
-  userId: number;
   customerId: number;
 }

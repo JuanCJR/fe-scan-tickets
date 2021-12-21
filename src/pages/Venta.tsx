@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Row,
@@ -18,9 +18,9 @@ import { GenTicketAlert } from "../components/alert/CustomAlert";
 
 export const Venta = () => {
   const sectorArray = [
-    { name: "General", price: 40000 },
-    { name: "Palco", price: 90000 },
-    { name: "VIP", price: 120000 },
+    { name: "Platea", price: 42000 },
+    { name: "Palco", price: 88000 },
+    { name: "VIP", price: 131000 },
   ];
 
   const cantidadArray = [1, 2, 3, 4, 5];
@@ -47,6 +47,7 @@ export const Venta = () => {
     rut: "",
     phone: "",
     birthday: new Date(),
+    exist: false,
   });
 
   const [postState, setPostState] = useState({
@@ -70,9 +71,10 @@ export const Venta = () => {
       event.preventDefault();
       setValidated(true);
 
+      //const customer = await 
       //Crea Customer
       const newCustomer = await createCostumer(customer);
-
+console.log(newCustomer)
       if (newCustomer.statusCode === 500) {
         setPostState((state) => ({
           ...state,
@@ -83,7 +85,6 @@ export const Venta = () => {
 
         scrollTop();
       } else {
-        const userId = 1;
 
         const price: number = sectorArray.filter(
           (item) => item.name === ticket.sector
@@ -92,7 +93,6 @@ export const Venta = () => {
         const ticketPayload = {
           ...ticket,
           customerId: newCustomer.id,
-          userId: userId,
           purchaseDate: new Date(),
           price: price,
         };
@@ -125,8 +125,23 @@ export const Venta = () => {
                   <h4>Nueva Venta</h4>
                   <p>Ingrese los siguientes datos para completar la venta</p>
 
+                  {/**Rut del cliente */}
+                  <FloatingLabel
+                    label="Rut"
+                    placeholder="Rut"
+                    onChange={(e) =>
+                      onChangeDefaultValue(e, "rut", changeCustomerState)
+                    }
+                  >
+                    <Form.Control type="text" placeholder="Rut" required />
+                    <Form.Control.Feedback type="invalid">
+                      Ingrese el Rut del cliente
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+
                   {/**Nombre del cliente */}
                   <FloatingLabel
+                    className="mt-3"
                     label="Nombre Cliente"
                     //placeholder="Nombre Cliente"
                     onChange={(e) =>
@@ -160,21 +175,6 @@ export const Venta = () => {
                     />
                     <Form.Control.Feedback type="invalid">
                       Ingrese el apellido del cliente
-                    </Form.Control.Feedback>
-                  </FloatingLabel>
-
-                  {/**Rut del cliente */}
-                  <FloatingLabel
-                    label="Rut"
-                    className="mt-3"
-                    placeholder="Rut"
-                    onChange={(e) =>
-                      onChangeDefaultValue(e, "rut", changeCustomerState)
-                    }
-                  >
-                    <Form.Control type="text" placeholder="Rut" required />
-                    <Form.Control.Feedback type="invalid">
-                      Ingrese el Rut del cliente
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
@@ -284,6 +284,22 @@ export const Venta = () => {
                       })}
                     </Form.Control>
                   </FloatingLabel>
+
+                  {ticket.payMethod === "Transferencia" ? (
+                    <React.Fragment>
+                      <Card className="mt-3">
+                        <Card.Header>Datos de Transferencia</Card.Header>
+                        <Card.Body style={{ textAlign: "left" }}>
+                          <p>Banco de Chile</p>
+                          <p>Cuenta Corriente: 1642464502</p>
+                          <p>RUT: 25459552-7</p>
+                          <p>Marlin Abreu abreumarlin@gmail.com</p>
+                        </Card.Body>
+                      </Card>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment></React.Fragment>
+                  )}
 
                   <Button className="mt-3" type="submit">
                     Realizar Venta

@@ -6,27 +6,27 @@ const host =
 const routes = [
   {
     name: "find",
-    route: `${host}/`,
+    route: `${host}`,
     method: "GET",
   },
   {
     name: "findOne",
-    route: `${host}/`,
+    route: `${host}`,
     method: "GET",
   },
   {
     name: "create",
-    route: `${host}/`,
+    route: `${host}`,
     method: "POST",
   },
   {
     name: "update",
-    route: `${host}/`,
+    route: `${host}`,
     method: "PUT",
   },
   {
     name: "delete",
-    route: `${host}/`,
+    route: `${host}`,
     method: "DELETE",
   },
 ];

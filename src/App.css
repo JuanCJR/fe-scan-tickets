@@ -23,6 +23,18 @@
   min-height: 100%;
 }
 
+.tableScrollbar {
+  margin-top: 0px;
+  overflow-y: scroll;
+}
+
+.staticTh th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: white;
+}
+
 .App {
   text-align: center;
 }

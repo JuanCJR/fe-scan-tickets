@@ -22,7 +22,7 @@ export const GenTicketAlert = (props) => {
         <Alert
           // className="text-primary"
           variant="success"
-          onClose={() => navigate(`/checkout/${data.id}`)}
+          onClose={() => navigate(`/invoice/${data.id}`)}
           dismissible
         >
           <Alert.Heading>Completado!</Alert.Heading>
