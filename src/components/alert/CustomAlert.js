@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Card } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 //Componente de alerta para creacion de reservas
 export const GenTicketAlert = (props) => {

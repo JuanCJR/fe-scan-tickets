@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Alert } from "react-bootstrap";
 
 //Componente de alerta para creacion de reservas
-export const LoginAlert = (props) => {
+export const LoginAlert = (props: any) => {
   const { loginStatus } = props;
   const [show, setShow] = useState(false);
 
@@ -18,7 +18,9 @@ export const LoginAlert = (props) => {
       return (
         <Alert variant="danger" onClose={() => setShow(false)}>
           <Alert.Heading>Credenciales Incorrectas</Alert.Heading>
-          <p className="text-black">Las credenciales ingresadas no son correctas</p>
+          <p className="text-black">
+            Las credenciales ingresadas no son correctas
+          </p>
         </Alert>
       );
     } else {

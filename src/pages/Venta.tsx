@@ -71,7 +71,7 @@ export const Venta = () => {
       setValidated(true);
 
       //Crea Customer
-      const newCustomer = await createCostumer(customer, "");
+      const newCustomer = await createCostumer(customer);
 
       if (newCustomer.statusCode === 500) {
         setPostState((state) => ({
@@ -98,7 +98,7 @@ export const Venta = () => {
         };
 
         //Crea Ticket Detail
-        const newTicket = await createTicket(ticketPayload, "");
+        const newTicket = await createTicket(ticketPayload);
         setPostState((state) => ({
           ...state,
           data: newTicket,

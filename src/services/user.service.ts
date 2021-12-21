@@ -3,33 +3,25 @@ import axios from "axios";
 import { Customer } from "../interfaces/Customer";
 import { getRoute } from "../routes/customers.routes";
 
-export const getCostumers = async (token: string) => {
+export const getUsers = async (token: string) => {
   const result = await axios.get(getRoute("find"));
   return result.data;
 };
 
-export const getCostumer = async (id: number, token: string) => {
+export const getUser = async (id: number, token: string) => {
   const result = await axios.get(`${getRoute("find")}/${id}`);
   return result.data;
 };
 
-export const createCostumer = async (payload: Customer) => {
+export const createUser = async (payload: Customer, token: string) => {
   try {
-    const token = sessionStorage.getItem("access_token");
-    const result = await axios({
-      method: "post",
-      url: getRoute("create"),
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        email: payload.email,
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        rut: payload.rut,
-        phone: payload.phone,
-        birthday: payload.birthday,
-      },
+    const result = await axios.post(getRoute("create"), {
+      email: payload.email,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      rut: payload.rut,
+      phone: payload.phone,
+      birthday: payload.birthday,
     });
     return result.data;
   } catch (e: any) {
