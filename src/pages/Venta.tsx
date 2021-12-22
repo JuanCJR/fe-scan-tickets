@@ -8,13 +8,17 @@ import {
   FloatingLabel,
   Button,
   Modal,
+  Spinner,
 } from "react-bootstrap";
-
+//Components
 import { PageTemplate } from "../components/PageTemplate";
+import { GenTicketAlert } from "../components/alert/CustomAlert";
+import { OnLoadSpinner } from "../components/spinners/OnLoadSpinner";
+
+//Funtions
 import { onChangeDefaultValue } from "../common/onChangeValue";
 import { createCostumer } from "../services/customer.service";
 import { createTicket } from "../services/tickets.service";
-import { GenTicketAlert } from "../components/alert/CustomAlert";
 
 export const Venta = () => {
   const sectorArray = [
@@ -56,6 +60,10 @@ export const Venta = () => {
     message: "",
   });
 
+  const [onLoad, setOnload] = useState(false);
+
+  const [submitButtonState, setSubmitBottonState] = useState(false);
+
   const scrollTop = () => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   };
@@ -70,10 +78,14 @@ export const Venta = () => {
     } else {
       event.preventDefault();
       setValidated(true);
+      setOnload(true);
+      setSubmitBottonState(true);
 
       //Crea Customer
       const newCustomer = await createCostumer(customer);
       if (newCustomer.statusCode === 500) {
+        setOnload(false);
+        setSubmitBottonState(false);
         setPostState((state) => ({
           ...state,
           data: {},
@@ -83,7 +95,6 @@ export const Venta = () => {
 
         scrollTop();
       } else {
-
         const price: number = sectorArray.filter(
           (item) => item.name === ticket.sector
         )[0].price;
@@ -97,11 +108,13 @@ export const Venta = () => {
 
         //Crea Ticket Detail
         const newTicket = await createTicket(ticketPayload);
+        console.log(ticketPayload)
         setPostState((state) => ({
           ...state,
           data: newTicket,
           code: 200,
         }));
+        setOnload(false);
         scrollTop();
       }
     }
@@ -299,9 +312,21 @@ export const Venta = () => {
                     <React.Fragment></React.Fragment>
                   )}
 
-                  <Button className="mt-3" type="submit">
-                    Realizar Venta
-                  </Button>
+                  {onLoad ? (
+                    <Spinner
+                      animation="grow"
+                      variant="success"
+                      className="mt-3"
+                    />
+                  ) : (
+                    <Button
+                      className="mt-3"
+                      disabled={submitButtonState}
+                      type="submit"
+                    >
+                      Realizar Venta
+                    </Button>
+                  )}
 
                   {/* <VentaModal
                     handleSubmit={handleSubmit}
@@ -319,6 +344,8 @@ export const Venta = () => {
     </PageTemplate>
   );
 };
+
+
 
 const VentaModal = (props: any) => {
   const { handleSubmit, customer, ticket, sectorArray } = props;

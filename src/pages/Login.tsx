@@ -45,7 +45,12 @@ export const Login = () => {
     } else {
       event.preventDefault();
 
-      const user = await doLogin(state);
+      const userPayload = {
+        email:state.email.toLowerCase(),
+        password:state.password
+      }
+
+      const user = await doLogin(userPayload);
       if (user.status !== 201) {
         setLoginStatus(user.status);
         alert('Credenciales Incorrectas');
