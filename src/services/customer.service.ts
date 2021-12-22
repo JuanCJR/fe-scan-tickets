@@ -36,7 +36,7 @@ export const createCostumer = async (payload: Customer) => {
       },
     });
 
-    if (!user) {
+    if (!user.data) {
       const result = await axios({
         method: "post",
         url: getRoute("create"),

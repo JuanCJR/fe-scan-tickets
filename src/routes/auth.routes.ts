@@ -1,7 +1,7 @@
 const host =
   process.env.REACT_APP_DEVENV === "1"
     ? "http://localhost:8081/api/scan-tickets/v1/auth"
-    : "/api/scan-tickets/v1/users";
+    : "/api/scan-tickets/v1/auth";
 
 const routes = [
   {

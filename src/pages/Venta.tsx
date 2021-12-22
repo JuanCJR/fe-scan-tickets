@@ -71,10 +71,8 @@ export const Venta = () => {
       event.preventDefault();
       setValidated(true);
 
-      //const customer = await 
       //Crea Customer
       const newCustomer = await createCostumer(customer);
-console.log(newCustomer)
       if (newCustomer.statusCode === 500) {
         setPostState((state) => ({
           ...state,
