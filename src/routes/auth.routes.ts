@@ -9,6 +9,15 @@ const routes = [
     route: `${host}/login`,
     method: "POST",
   },
+  {
+    name: "refresh",
+    route: `${host}/refresh`,
+    method: "POST",
+  },{
+    name: "validate",
+    route: `${host}/validate`,
+    method: "POST",
+  },
 ];
 
 export const getRoute = (name: string) => {

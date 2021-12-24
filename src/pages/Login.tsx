@@ -9,13 +9,14 @@ import {
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ms from "ms";
 
 import { PageTemplate } from "../components/PageTemplate";
-import {LoginAlert} from '../components/alert/LoginAlert';
+import { LoginAlert } from "../components/alert/LoginAlert";
 import { onChangeDefaultValue } from "../common/onChangeValue";
 import { doLogin } from "../services/auth.service";
 
-export const Login = () => {
+export const Login = (props: any) => {
   const [validated, setValidated] = useState(false);
   const [state, changeState] = useState({
     email: "",
@@ -46,19 +47,21 @@ export const Login = () => {
       event.preventDefault();
 
       const userPayload = {
-        email:state.email.toLowerCase(),
-        password:state.password
-      }
+        email: state.email.toLowerCase(),
+        password: state.password,
+      };
 
       const user = await doLogin(userPayload);
+
       if (user.status !== 201) {
         setLoginStatus(user.status);
-        alert('Credenciales Incorrectas');
+        alert("Credenciales Incorrectas");
       } else {
         setLoginStatus(user.status);
-
         sessionStorage.setItem("access_token", user.data.access_token);
         sessionStorage.setItem("sub", user.data.user.id);
+        sessionStorage.setItem("expiresIn", ms(user.data.expiresIn));
+
         navigate("/");
       }
     }
@@ -70,10 +73,7 @@ export const Login = () => {
         <Row className="justify-content-md-center">
           <Col md="auto">
             <Card className="w-100 mw-100 mt-5 shadowCard">
-             <Card.Header>
-
-               
-             </Card.Header>
+              <Card.Header></Card.Header>
 
               <Card.Body>
                 <Form

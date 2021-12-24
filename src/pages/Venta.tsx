@@ -13,7 +13,6 @@ import {
 //Components
 import { PageTemplate } from "../components/PageTemplate";
 import { GenTicketAlert } from "../components/alert/CustomAlert";
-import { OnLoadSpinner } from "../components/spinners/OnLoadSpinner";
 
 //Funtions
 import { onChangeDefaultValue } from "../common/onChangeValue";

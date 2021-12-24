@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
+import ms from "ms";
 import { useNavigate } from "react-router-dom";
+import { validateUser } from "../services/auth.service";
+import { RefreshModal } from "./modal/RefreshModal";
 
 export const PageTemplate = (props: any) => {
   const [state, changeState] = useState({
-    userId: "",
+    userId: 0,
     isLoggedIn: false,
+    sessionExpired: false,
   });
-
   let navigate = useNavigate();
   const linksArray = [
     { name: "Inicio", route: "/" },
@@ -17,6 +20,25 @@ export const PageTemplate = (props: any) => {
     { name: "Check", route: "/check" },
   ];
 
+  const countRemainingTime = () => {
+    setInterval(() => {
+      const expiresIn = sessionStorage.getItem("expiresIn");
+      let timeRemaining: number = Number(expiresIn) - ms("5s");
+      if (timeRemaining < 1) {
+        changeState((state) => ({ ...state, sessionExpired: true }));
+        sessionStorage.setItem("expiresIn", "0");
+      } else {
+        sessionStorage.setItem("expiresIn", timeRemaining.toString());
+      }
+    }, ms("5s"));
+  };
+
+  const setSessionExpired = () => {
+    changeState((state) => ({
+      ...state,
+      sessionExpired: false,
+    }));
+  };
   useEffect(() => {
     async function loadData() {
       const token = sessionStorage.getItem("access_token");
@@ -24,12 +46,20 @@ export const PageTemplate = (props: any) => {
       if (!token) {
         navigate("/login");
       } else {
-        // const usuario = await validaSesion(token);
-        changeState((state: any) => ({
-          ...state,
-          userId: 1,
-          isLoggedIn: true,
-        }));
+        const user = await validateUser();
+
+        if (user.status !== 201) {
+          navigate("/login");
+          sessionStorage.clear();
+        } else {
+          changeState((state: any) => ({
+            ...state,
+            userId: user.data.sub,
+            isLoggedIn: true,
+          }));
+
+          countRemainingTime();
+        }
       }
     }
     loadData();
@@ -44,7 +74,11 @@ export const PageTemplate = (props: any) => {
       <header>
         <Container fluid>
           <Navbar></Navbar>
-          <Navbar  collapseOnSelect expand="lg"  className="text-white shadowCard">
+          <Navbar
+            collapseOnSelect
+            expand="lg"
+            className="text-white shadowCard"
+          >
             {/* <Navbar.Brand href="/">Tickets Sale</Navbar.Brand> */}
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse>
@@ -67,7 +101,6 @@ export const PageTemplate = (props: any) => {
                       onClick={() => {
                         sessionStorage.clear();
                         handleClick("/login");
-                        
                       }}
                     >
                       Cerrar Sesion
@@ -87,6 +120,10 @@ export const PageTemplate = (props: any) => {
         </Container>
       </header>
       <main>{props.children}</main>
+      <RefreshModal
+        sessionExpired={state.sessionExpired}
+        setSessionExpired={setSessionExpired}
+      />
     </React.Fragment>
   );
 };
