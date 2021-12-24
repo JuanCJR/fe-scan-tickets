@@ -30,7 +30,7 @@ export const PageTemplate = (props: any) => {
       } else {
         sessionStorage.setItem("expiresIn", timeRemaining.toString());
       }
-    }, ms("5s"));
+    }, ms("20s"));
   };
 
   const setSessionExpired = () => {
