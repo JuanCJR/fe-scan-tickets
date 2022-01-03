@@ -13,7 +13,8 @@ const routes = [
     name: "refresh",
     route: `${host}/refresh`,
     method: "POST",
-  },{
+  },
+  {
     name: "validate",
     route: `${host}/validate`,
     method: "POST",
