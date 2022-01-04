@@ -10,6 +10,11 @@ const routes = [
     method: "GET",
   },
   {
+    name: "findGroupedBySector",
+    route: `${host}/group-by/sector`,
+    method: "GET",
+  },
+  {
     name: "findOne",
     route: `${host}`,
     method: "GET",

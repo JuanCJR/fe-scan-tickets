@@ -54,3 +54,16 @@ export const createTicket = async (payload: Ticket) => {
 
   return result.data;
 };
+
+export const getGroupedBySector = async () => {
+  const token = sessionStorage.getItem("access_token");
+
+  const result = await axios({
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    url: getRoute("findGroupedBySector"),
+  });
+  return result.data;
+};
