@@ -25,7 +25,8 @@ export const Entradas = () => {
                   <tr className="staticTh">
                     <th>ID</th>
                     <th>Cliente</th>
-                    <th>Usuario</th>
+                    <th>Email Cliente</th>
+                    <th>Email Vendedor</th>
                     <th>Método de Pago</th>
                     <th>Sector</th>
                     <th>Fecha de Compra</th>
@@ -41,9 +42,10 @@ export const Entradas = () => {
                         <tr key={item.id}>
                           <td>{item.id}</td>
                           <td>
-                            {item.customer.rut} - {item.customer.firstName}{" "}
+                            {item.customer.rut} - {item.customer.firstName}
                             {item.customer.lastName}
                           </td>
+                          <td>{item.customer.email}</td>
                           <td>{item.user.email}</td>
                           <td>{item.payMethod}</td>
                           <td>{item.sector}</td>
