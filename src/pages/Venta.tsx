@@ -21,9 +21,9 @@ import { createTicket } from "../services/tickets.service";
 
 export const Venta = () => {
   const sectorArray = [
-    { name: "Platea", price: 42000 },
-    { name: "Palco", price: 88000 },
-    { name: "VIP", price: 131000 },
+    { name: "Platea", price: 45000 },
+    { name: "Palco", price: 95000 },
+    { name: "VIP", price: 140000 },
   ];
 
   const cantidadArray = [1, 2, 3, 4, 5];
@@ -107,7 +107,7 @@ export const Venta = () => {
 
         //Crea Ticket Detail
         const newTicket = await createTicket(ticketPayload);
-        console.log(ticketPayload)
+        console.log(ticketPayload);
         setPostState((state) => ({
           ...state,
           data: newTicket,
@@ -343,8 +343,6 @@ export const Venta = () => {
     </PageTemplate>
   );
 };
-
-
 
 const VentaModal = (props: any) => {
   const { handleSubmit, customer, ticket, sectorArray } = props;
