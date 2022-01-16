@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -18,29 +18,27 @@ import { GenTicketAlert } from "../components/alert/CustomAlert";
 import { onChangeDefaultValue } from "../common/onChangeValue";
 import { createCostumer } from "../services/customer.service";
 import { createTicket } from "../services/tickets.service";
+import { getEvent, getEvents } from "../services/events.service";
+
+//Types
+import { TicketTypeProps } from "../interfaces/response/TicketType";
+import { NewTicketProps } from "../interfaces/request/Ticket";
+import { EventsProps } from "../interfaces/response/Events";
+import { getTickesTypeByEvent } from "../services/ticket-type.service";
 
 export const Venta = () => {
-  const sectorArray = [
-    { name: "Platea", price: 45000 },
-    { name: "Palco", price: 95000 },
-    { name: "VIP", price: 140000 },
-  ];
-
   const cantidadArray = [1, 2, 3, 4, 5];
   const metodoPagoArray = ["Transferencia", "Debito", "Credito", "Efectivo"];
 
   const [validated, setValidated] = useState(false);
 
-  const [ticket, changeTicketState] = useState({
+  const [ticket, changeTicketState] = useState<NewTicketProps>({
     state: "not marked",
     payMethod: "",
-    sector: "",
-    date: new Date("2022-03-12 19:00:00"),
-    purchaseDate: new Date(),
-    price: 0,
     quantity: 0,
     userId: 0,
     customerId: 0,
+    ticketTypeId: 0,
   });
 
   const [customer, changeCustomerState] = useState({
@@ -53,6 +51,11 @@ export const Venta = () => {
     exist: false,
   });
 
+  const [evento, setEvento] = useState({ eventId: 0 });
+  const [eventos, setEventos] = useState<EventsProps[]>([]);
+
+  const [ticketTypes, setTickestType] = useState<TicketTypeProps[]>([]);
+
   const [postState, setPostState] = useState({
     data: {},
     code: 0,
@@ -62,6 +65,24 @@ export const Venta = () => {
   const [onLoad, setOnload] = useState(false);
 
   const [submitButtonState, setSubmitBottonState] = useState(false);
+
+  useEffect(() => {
+    async function loadData() {
+      const eventos = await getEvents();
+      setEventos(eventos);
+    }
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    async function loadData() {
+      if (evento.eventId !== 0) {
+        const event = await getEvent(evento.eventId);
+        setTickestType(event.ticketsType);
+      }
+    }
+    loadData();
+  }, [evento]);
 
   const scrollTop = () => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -94,20 +115,13 @@ export const Venta = () => {
 
         scrollTop();
       } else {
-        const price: number = sectorArray.filter(
-          (item) => item.name === ticket.sector
-        )[0].price;
-
         const ticketPayload = {
           ...ticket,
           customerId: newCustomer.id,
-          purchaseDate: new Date(),
-          price: price,
         };
 
         //Crea Ticket Detail
         const newTicket = await createTicket(ticketPayload);
-        console.log(ticketPayload);
         setPostState((state) => ({
           ...state,
           data: newTicket,
@@ -231,21 +245,45 @@ export const Venta = () => {
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
+                  {/**Evento */}
+                  <FloatingLabel
+                    label="Evento"
+                    className="mt-3"
+                    onChange={(e) => {
+                      onChangeDefaultValue(e, "eventId", setEvento);
+                    }}
+                  >
+                    <Form.Control as="select" required={true}>
+                      <option value="">Seleccione el Evento</option>
+                      {eventos.map((item) => {
+                        return (
+                          <option key={item.name} value={item.id}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                    </Form.Control>
+                  </FloatingLabel>
+
                   {/**Sector de la entrada */}
                   <FloatingLabel
                     label="Sector"
                     className="mt-3"
                     onChange={(e) => {
-                      onChangeDefaultValue(e, "sector", changeTicketState);
+                      onChangeDefaultValue(
+                        e,
+                        "ticketTypeId",
+                        changeTicketState
+                      );
                     }}
                   >
                     <Form.Control as="select" required={true}>
                       <option value="">
                         Seleccione el Sector de la Entrada
                       </option>
-                      {sectorArray.map((item) => {
+                      {ticketTypes?.map((item) => {
                         return (
-                          <option key={item.name} value={item.name}>
+                          <option key={item.name} value={item.id}>
                             {item.name}
                           </option>
                         );

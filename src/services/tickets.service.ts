@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Ticket } from "../interfaces/Ticket";
+import { NewTicketProps } from "../interfaces/request/Ticket";
 
 import { getRoute } from "../routes/tickets.routes";
 
@@ -29,7 +29,7 @@ export const getTicket = async (id: string | undefined) => {
   return result.data;
 };
 
-export const createTicket = async (payload: Ticket) => {
+export const createTicket = async (payload: NewTicketProps) => {
   const token = sessionStorage.getItem("access_token");
   const userId = sessionStorage.getItem("sub");
 
@@ -42,13 +42,10 @@ export const createTicket = async (payload: Ticket) => {
     data: {
       state: payload.state,
       payMethod: payload.payMethod,
-      sector: payload.sector,
-      date: payload.date,
-      purchaseDate: payload.purchaseDate,
-      price: payload.price,
       quantity: payload.quantity,
       userId: userId,
       customerId: payload.customerId,
+      ticketTypeId: payload.ticketTypeId,
     },
   });
 
