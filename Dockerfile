@@ -22,6 +22,6 @@ COPY ./server.crt /etc/nginx/server.crt
 
 COPY ./server.key /etc/nginx/server.key
 
-EXPOSE 443
+EXPOSE 3000
 
 # Copy the default nginx.conf
