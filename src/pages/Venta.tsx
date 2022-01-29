@@ -338,10 +338,10 @@ export const Venta = () => {
                       <Card className="mt-3">
                         <Card.Header>Datos de Transferencia</Card.Header>
                         <Card.Body style={{ textAlign: "left" }}>
-                          <p>Banco de Chile</p>
-                          <p>Cuenta Corriente: 1642464502</p>
-                          <p>RUT: 25459552-7</p>
-                          <p>Marlin Abreu abreumarlin@gmail.com</p>
+                          <p>Banco Santander</p>
+                          <p>Cuenta Corriente: 000069745660</p>
+                          <p>RUT: 25.029.931-1</p>
+                          <p>Juan Jiménez jjimenezsn@gmail.com</p>
                         </Card.Body>
                       </Card>
                     </React.Fragment>
