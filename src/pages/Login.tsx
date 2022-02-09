@@ -7,7 +7,7 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ms from "ms";
 
@@ -15,7 +15,7 @@ import { PageTemplate } from "../components/PageTemplate";
 import { LoginAlert } from "../components/alert/LoginAlert";
 import { onChangeDefaultValue } from "../common/onChangeValue";
 import { doLogin } from "../services/auth.service";
-
+import { RoleContext } from "../common/roleContext";
 export const Login = (props: any) => {
   const [validated, setValidated] = useState(false);
   const [state, changeState] = useState({
@@ -24,6 +24,7 @@ export const Login = (props: any) => {
   });
   const [loginStatus, setLoginStatus] = useState(0);
   let navigate = useNavigate();
+  const { role, setRole } = useContext(RoleContext);
 
   useEffect(() => {
     async function loadData() {
@@ -61,6 +62,7 @@ export const Login = (props: any) => {
         sessionStorage.setItem("access_token", user.data.access_token);
         sessionStorage.setItem("sub", user.data.user.id);
         sessionStorage.setItem("expiresIn", ms(user.data.expiresIn));
+        setRole(user.data.role);
 
         navigate("/");
       }

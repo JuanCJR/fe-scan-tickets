@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router";
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import ms from "ms";
 import { Home } from "./pages/Home";
 
@@ -12,34 +12,41 @@ import { Login } from "./pages/Login";
 import { Invoice } from "./pages/Invoice";
 import { RefreshModal } from "./components/modal/RefreshModal";
 import { PageTemplate } from "./components/PageTemplate";
+import { RoleContext } from "./common/roleContext";
 
-export default class App extends Component {
-  state = {
-    expiresIn: 0,
+const App = () => {
+  const [role, setRole] = useState<string>("");
+
+  useEffect(() => {
+    function load() {
+      const roleInStorage = localStorage.getItem("role");
+      if (roleInStorage) {
+        setRoleStorage(roleInStorage);
+      }
+    }
+    load();
+  });
+
+  const setRoleStorage = (role: string) => {
+    localStorage.setItem("role", role);
+    setRole(role);
   };
 
-  render() {
-    return (
+  return (
+    <RoleContext.Provider value={{ role: role, setRole: setRoleStorage }}>
       <div className="App">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/entradas" element={<Entradas />} />
-            <Route path="/venta" element={<Venta />} />
-            <Route path="/usuarios" element={<Usuarios />} />
-            <Route
-              path="/login"
-              element={<Login/>}
-            />
-            <Route path="/check" element={<Check />} />
-            <Route path="/invoice/:id" element={<Invoice />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/entradas" element={<Entradas />} />
+          <Route path="/venta" element={<Venta />} />
+          <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/check" element={<Check />} />
+          <Route path="/invoice/:id" element={<Invoice />} />
+        </Routes>
       </div>
-    );
-  }
+    </RoleContext.Provider>
+  );
+};
 
-  getExpiresIn = (expiresIn: string) => {
-    this.setState({
-      expiresIn: ms(expiresIn),
-    });
-  };
-}
+export default App;

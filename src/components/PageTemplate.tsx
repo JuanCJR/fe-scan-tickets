@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import ms from "ms";
 import { useNavigate } from "react-router-dom";
 import { validateUser } from "../services/auth.service";
 import { RefreshModal } from "./modal/RefreshModal";
-
+import { RoleContext } from "../common/roleContext";
 export const PageTemplate = (props: any) => {
   const [state, changeState] = useState({
     userId: 0,
@@ -12,13 +12,14 @@ export const PageTemplate = (props: any) => {
     sessionExpired: false,
   });
   let navigate = useNavigate();
-  const linksArray = [
-    { name: "Inicio", route: "/" },
-    { name: "Entradas", route: "/entradas" },
-    { name: "Venta", route: "/venta" },
-    { name: "Usuarios", route: "/usuarios" },
-    { name: "Check", route: "/check" },
-  ];
+  const { role } = useContext(RoleContext);
+  const [linksArray, setLinkArray] = useState([
+    { name: "Inicio", route: "/", permissionToSeller: true },
+    { name: "Entradas", route: "/entradas", permissionToSeller: false },
+    { name: "Venta", route: "/venta", permissionToSeller: true },
+    { name: "Usuarios", route: "/usuarios", permissionToSeller: false },
+    { name: "Check", route: "/check", permissionToSeller: true },
+  ]);
 
   const countRemainingTime = () => {
     setInterval(() => {
@@ -52,6 +53,13 @@ export const PageTemplate = (props: any) => {
           navigate("/login");
           sessionStorage.clear();
         } else {
+          if (role === "seller") {
+            const newLinksArray = linksArray.filter(
+              (item) => item.permissionToSeller === true
+            );
+            setLinkArray(newLinksArray);
+          }
+
           changeState((state: any) => ({
             ...state,
             userId: user.data.sub,
@@ -63,7 +71,7 @@ export const PageTemplate = (props: any) => {
       }
     }
     loadData();
-  }, [changeState]);
+  }, [changeState, setLinkArray, role]);
 
   const handleClick = (route: string) => {
     navigate(route);
