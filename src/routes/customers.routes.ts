@@ -34,6 +34,11 @@ const routes = [
     route: `${host}`,
     method: "DELETE",
   },
+  {
+    name: "getTicketByRut",
+    route: `${host}/tickets`,
+    method: "get",
+  },
 ];
 
 export const getRoute = (name: string) => {

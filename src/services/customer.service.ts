@@ -13,6 +13,18 @@ export const getCostumer = async (id: number, token: string) => {
   return result.data;
 };
 
+export const getCostumerTicketByRut = async (rut: string) => {
+  const token = sessionStorage.getItem("access_token");
+  const result = await axios({
+    method: "get",
+    url: `${getRoute("getTicketByRut")}/${rut}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return result.data;
+};
+
 export const getCostumerByRut = async (rut: number) => {
   const token = sessionStorage.getItem("access_token");
   const result = await axios({
